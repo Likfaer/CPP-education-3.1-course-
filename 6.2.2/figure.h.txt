@@ -1,0 +1,48 @@
+#pragma once
+#include <iostream>
+#include <windows.h>
+#include <typeinfo>
+using namespace std;
+
+class Figure
+{
+public:
+    Figure()
+    {
+        cout << "Fig constructor" << endl;
+    }
+    double area(double x1);
+    double area(double x1, double x2);
+    void show();
+protected:
+    double pl = -1;
+    string Fname = "null";
+};
+class Circle : public Figure
+{
+public:
+    Circle(float rr)
+    {
+        cout << "Circ constructor" << endl;
+        Fname = "Circle";
+        if (rr > 0) r = rr;
+        else { cout << "r<0 | Выход.." << endl; exit(0); }
+        area(r);
+    }
+private:
+    float r = -1;
+};
+class Rectangl : public Figure
+{
+public:
+    Rectangl(float x1, float x2 = -1)
+    {
+        cout << "Rect constructor" << endl;
+        a = x1;
+        x2 == -1 ? b = a : b = x2;
+        a == b ? Fname = "Square" : Fname = "Rectangle";
+        area(a, b);
+    }
+private:
+    float a, b;
+};
