@@ -1,0 +1,191 @@
+#include <iostream>
+#include <conio.h>
+#include <string.h>
+#include <windows.h>
+using namespace std;
+
+//============================================================COMPLEX=============================================================
+class Complex
+{
+private:
+    double A, B; // A - целая часть B - мнимая часть
+public:
+    friend ostream& operator<<(ostream& out_stream, Complex&);
+    friend istream& operator>>(istream& in_stream, Complex&);
+    Complex(double AA = 0, double BB = 0) : A(AA), B(BB)
+    {}
+    Complex operator+(Complex& CC)
+    {
+        A += CC.A;
+        B += CC.B;
+        return *this;
+    }
+    Complex operator-(Complex& CC)
+    {
+        A -= CC.A;
+        B -= CC.B;
+        return *this;
+    }
+};
+ostream& operator<<(ostream& out, Complex& CC)
+{
+    out << CC.A;
+    if (CC.B > 0)
+        out << " + ";
+    out << CC.B << "*i";
+    return out;
+}
+istream& operator>>(istream& in, Complex& CC)
+{
+    in >> CC.A;
+    in >> CC.B;
+    return in;
+}
+//============================================================MATRIX============================================================
+template <typename T> class Matrix
+{
+private:
+    int string;
+    int column;
+    T** pointer;
+public:
+    Matrix(int stringg, int columnn) : string(stringg), column(columnn)
+    {
+        cout << "Коструктор матрицы" << endl;
+        int i, j;
+        pointer = new T * [string];
+        for (i = 0; i < string; i++)
+        {
+            pointer[i] = new T[column];
+        }
+    }
+    Matrix<T>& operator+(Matrix<T>& CC)
+    {
+        int i, j;
+        if ((string == CC.string) && (column == CC.column))
+        {
+            Matrix Temp(string, column);
+            for (i = 0; i < string; i++)
+                for (j = 0; j < column; j++)
+                    Temp.pointer[i][j] = pointer[i][j] + CC.pointer[i][j]; // не использую += тк для complex типа чисел потребуется перегрузка этого 
+            return Temp;
+        }
+        else
+        {
+            cout << "Матрицы разного размера";
+            return *this;
+        }
+    }
+    Matrix<T>& operator-(Matrix<T>& CC)
+    {
+        int i, j;
+        if ((string == CC.string) && (column == CC.column))
+        {
+            Matrix Temp(string,column);
+            for (i = 0; i < string; i++)
+                for (j = 0; j < column; j++)
+                    Temp.pointer[i][j] = pointer[i][j] - CC.pointer[i][j]; // не использую -= тк для complex типа чисел потребуется перегрузка этого 
+                return Temp;
+        }
+        else
+        {
+            cout << "Матрицы разного размера";
+                return *this;
+        }
+    }
+    Matrix<T>& operator=(Matrix<T>& CC)
+    {
+        int i, j;
+        for (i = 0; i < string; i++)
+            for (j = 0; j < column; j++)
+                pointer[i][j] = CC.pointer[i][j];
+        return *this;
+    }
+    friend ostream& operator<< <>(ostream&, const Matrix<T>&);
+    friend istream& operator>> <>(istream&, Matrix<T>&);
+
+};
+template <typename T> istream& operator>>(istream& in, Matrix<T>& CC)
+{
+    int i, j;
+    for (i = 0; i < CC.string; i++)
+        for (j = 0; j < CC.column; j++)
+        {
+            cout << "M[" << (i + 1) << "][" << (j + 1) << "]=";
+            in >> CC.pointer[i][j];
+        }
+    return in;
+}
+template <typename T> ostream& operator<<(ostream& out, const Matrix<T>& CC)
+{
+    int i, j;
+    for (i = 0; i < CC.string; i++)
+    {
+        for (j = 0; j < CC.column; j++)
+        {
+            out << " " << CC.pointer[i][j];
+        }
+        cout << endl;
+    }
+    return out;
+}
+//============================================================MAIN============================================================
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Complex First(1, 2);
+    Complex Second(3, 4);
+    cout << "Оператор вывода : " << First << " | " << Second << endl;
+    //Демонстрация ввода
+    Complex Third;
+    cout << "Ввод третьего объекта : ";
+    cin >> Third;
+    cout << "Третий объект : " << Third << endl;
+    //Демонстрация перегрузки сложения и вычитания
+    cout << "Прибавим к первому - второй : ";
+    First = First + Second;
+    cout << First <<  endl;
+    cout << "Отнимем от третьего первый : ";
+    Third = Third - First;
+    cout << Third << endl;
+    // ========================Демонстрация работы INT========================
+    Matrix <int> FirstINT(3, 3), SecondINT(3, 3);
+    cout << "INT ввод: " << endl;
+    cin >> FirstINT;
+    cin >> SecondINT;
+    //Перегрузка сложения и вычитания INT матрицы
+    cout << FirstINT << endl << SecondINT << endl;
+    cout << "Сложение матриц:" << endl;
+    FirstINT = FirstINT + SecondINT;
+    cout << FirstINT;
+    cout << "Вычитание матриц:" << endl;
+    FirstINT = FirstINT - SecondINT;
+    cout << FirstINT;
+    // ========================Демонстрация работы Float ========================
+    Matrix <float> FirstFloat(2, 2), SecondFloat(2, 2);
+    cout << "Float ввод: " << endl;
+    cin >> FirstFloat;
+    cin >> SecondFloat;
+    //Перегрузка сложения и вычитания Float матрицы
+    cout << FirstFloat << endl << SecondFloat << endl;
+    cout << "Сложение матриц:" << endl;
+    FirstFloat = FirstFloat + SecondFloat;
+    cout << FirstFloat;
+    cout << "Вычитание матриц:" << endl;
+    FirstFloat = FirstFloat - SecondFloat;
+    cout << FirstFloat;
+    // ========================Демонстрация работы Complex ========================
+    Matrix <Complex> FirstComplex(2, 1), SecondComplex(2, 1);
+    cout << "Complex ввод: " << endl;
+    cin >> FirstComplex;
+    cin >> SecondComplex;
+    //Перегрузка сложения и вычитания Complex матрицы
+    cout << FirstComplex << endl << SecondComplex << endl;
+    cout << "Сложение матриц:" << endl;
+    FirstComplex = FirstComplex + SecondComplex;
+    cout << FirstComplex;
+    cout << "Вычитание матриц:" << endl;
+    FirstComplex = FirstComplex - SecondComplex;
+    cout << FirstComplex;
+}

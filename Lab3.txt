@@ -1,0 +1,92 @@
+﻿#include <iostream>
+#include <windows.h>
+//#include <chrono>
+using namespace std;
+//auto start = chrono::high_resolution_clock::now();
+CONST int GOODSMAX = 10;
+int CURID = -1;
+class Goods
+{
+	friend void Change(Goods*);
+public:
+	Goods(string Namee = "Nullname", string Datee = "TEMPDATE", double Costt = 1, int Amountt = 0, int IDD = 0)
+	{
+		//auto end = std::chrono::high_resolution_clock::now();
+		//chrono::duration<float> duration = end - start;
+		cout << "Goodsconst call [Time - //время//" << /*duration.count() << " сек.]" <<*/ endl;
+		Name = Namee; Date = Datee; Cost = Costt; Amount = Amountt; ID = IDD;
+	}
+	Goods(const Goods& x)
+	{
+		cout << "вызван конструктор копирования" << endl;
+
+	}
+	~Goods()
+	{
+		//auto end = std::chrono::high_resolution_clock::now();
+		//chrono::duration<float> duration = end - start;
+		cout << "Goodsdestr call [Time - //время//" << /*duration.count() << " сек.]" <<*/ endl;
+	}
+	void show()
+	{
+	    cout << Cost << " * " << Amount << endl;
+		cout << "[ " << Name << " | " << Date << " | " << Cost << " | " << Amount << " | " << ID << " | " << Total(Cost, Amount) << " ]" << endl;
+	}
+	Goods& operator= (const Goods &G)
+	{
+		cout << "Перегруженный оператор присваивания" << endl;
+		return *this;
+	}
+private:
+	string Name;
+	string Date;
+	double Cost;
+	int Amount;
+	int ID;
+	double Total(double Costt, int Amountt)
+	{
+		double total = ((Cost = Costt) * (Amount = Amountt));
+		return total;
+	}
+};
+void Change(Goods* ch)
+{
+	cout << "Name = "; cin >> ch->Name;
+	cout << "Date = "; cin >> ch->Date;
+	cout << "Cost = "; cin >> ch->Cost;
+	cout << "Amount = "; cin >> ch->Amount;
+	cout << "ID = "; cin >> ch->ID;
+}
+
+Goods tovar(Goods &s) { return s; }// 5.2
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	cout << "Вход в функцию main()" << endl;
+	Goods test[GOODSMAX];
+	cout << " Введите ID для смены данных: ";
+    while ((CURID < 0) or (CURID > GOODSMAX))
+    {
+        cin >> CURID;
+        if (CURID < 0 or CURID > GOODSMAX)
+            cout << " ID неверен ";
+    }
+	Goods& out = test[CURID];
+	out.show();
+	Change(&out);
+	out.show();
+	Goods copy(test[0]);
+	//copy.show();
+	cout << "----5.2----" << endl;
+	tovar(test[0]);
+	// 5.2 вызывает конструктор копировния, копирующий test[0], затем выводит адреса объектов, описанные в этом конструкторе |tovar(Goods s) { return s; }
+	// 5.3 функция tovar перестала повторно вызывать конструктор копирования для вывода адреса (правильное использование)     |tovar(Goods &s) { return s;}
+	// 5.4 функция tovar стала работать как ссылка на передаваемый объект (выводит значения передаваемого объекта)  | (Goods *s) { return *s; } and tovar(&test[0]);
+	cout << "----6----" << endl;
+	Goods sigment;
+	sigment = test[0];
+	sigment.show();
+	cout << "Выход из функции main()" << endl;
+
+}

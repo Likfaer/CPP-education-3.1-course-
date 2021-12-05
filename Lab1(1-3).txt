@@ -1,0 +1,146 @@
+#include <iostream>
+#include<typeinfo>
+#include <windows.h>
+#include <thread>
+#include <chrono>
+using namespace std;
+CONST int COMPANYCOUNT = 11;
+string names[100];
+int ID = 0;
+int CURID = ID;
+auto start = std::chrono::high_resolution_clock::now();
+class Stock
+{
+public:
+    string name = "CompanyName";
+    int amount = 0;
+    float cost = 0;
+    Stock()
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        chrono::duration<float> duration = end - start;
+        cout << "Вызван конструктор.                           [Время вызова - " << duration.count() << " сек.]" << endl;
+    }
+    Stock(string a)
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        chrono::duration<float> duration = end - start;
+        cout << a << "     [Время вызова - " << duration.count() << " сек.]" << endl;
+    }
+    ~Stock()
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        chrono::duration<float> duration = end - start;
+        cout << "Удаление..                                    [Время вызова - " << duration.count() << " сек.]" << endl;
+    }
+    void acquire()
+    {
+        cout << "Введите наименование компании: ";
+        cin >> name;
+        cout << "Введите количество акций: ";
+        cin >> amount;
+        cout << "Введите цену акции: ";
+        cin >> cost;
+        names[ID] = name; ID += 1;
+        float Price = set_tot(amount, cost);
+    }
+    void buy(int add)
+    {
+        amount += add;
+    }
+    void sell(int dec)
+    {
+        amount -= dec;
+    }
+    void update(float correct)
+    {
+        cost = correct;
+        set_tot(amount, cost);
+    }
+    void show()
+    {
+        cout << "Наименование: " << name << endl << "Количество акций: " << amount << endl << "Цена за единицу: " << cost << endl << "Общая сумма: " << set_tot(amount, cost) << endl << endl;
+    }
+    void shortshow()
+    {
+        cout << name << "[" << amount << " , " << cost << " , " << set_tot(amount, cost) << "]" << endl;
+    }
+
+private:
+    float set_tot(int amount, float cost)
+    {
+        float total = amount * cost;
+        return total;
+    }
+
+};
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Stock Company[COMPANYCOUNT];
+    Stock& out = Company[CURID];
+    Stock("Вызван конструктор, получивший эту строку");
+    float a;
+    int b;
+    int Caseswitcher = -1;
+    out.acquire();
+    while (Caseswitcher != 0)
+    {
+        Stock& out = Company[CURID];
+        system("cls");
+        out.show();
+        cout << " 1 - Купить акции" << endl;
+        cout << " 2 - Продать акции" << endl;
+        cout << " 3 - Обновить цену акции" << endl;
+        cout << " 4 - Добавить компанию" << endl;
+        cout << " 5 - Смена выбранной компании" << endl;
+        cout << " 0 - Выход" << endl;
+        
+        cin >> Caseswitcher;
+        switch (Caseswitcher)
+        {
+        case 1:
+            system("cls");
+            out.show();
+            cout << "Введите количество: ";
+            cin >> b;
+            out.buy(b);
+
+            break;
+        case 2:
+            system("cls");
+            out.show();
+            cout << "Введите количество: ";
+            cin >> b;
+            out.sell(b);
+            break;
+        case 3:
+            system("cls");
+            out.show();
+            cout << "Введите цену: ";
+            cin >> a;
+            out.update(a);
+            break;
+        case 4:
+        {
+            CURID += 1;
+            Stock& out = Company[CURID];
+            out.acquire();
+            break;
+        }
+        case 5:
+            system("cls");
+            int bugprot;
+            for (int i = 0; i < ID; i++) { cout << i << " - "; CURID = i; Stock& out = Company[CURID];  out.shortshow(); }
+            cout << COMPANYCOUNT << "- Выход" << endl;
+            cout << "Введите номер компании для смены: ";
+            cin >> bugprot;
+            if (bugprot <= COMPANYCOUNT) CURID = bugprot;
+            else
+            { cout << "Превышено число объектов" << endl; Sleep(2000); break; }
+            break;
+        default: break;
+        }
+    }
+}

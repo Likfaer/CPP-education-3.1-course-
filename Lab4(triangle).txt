@@ -1,0 +1,83 @@
+#include <iostream>
+#include <windows.h>
+using namespace std;
+
+int  myfunc(int i)
+{
+	return i;
+}
+double myfunc(double i)
+{
+	return i;
+}
+//------------------------------------PART2------------------------------------
+class Line
+{
+public:
+	Line(double posx1, double posx2, double posy1, double posy2, double posz1 = 0, double posz2 = 0)
+	{
+		x1 = posx1;  x2 = posx2, y1 = posy1, y2 = posy2; z1 = posz1; z2 = posz2;
+	}
+	double Len(Line& a)
+	{
+		double Len = sqrt(pow(a.x1 - a.x2, 2) + pow(a.y1 - a.y2, 2) + pow(a.z1 - a.z2, 2));
+		return Len;
+	}
+	double x1, x2, y1, y2, z1 = 0, z2 = 0;
+};
+class Point
+{
+public:
+	Point()
+	{
+	}
+	Point(double posx, double posy, double posz = 0)
+	{
+		x = posx; y = posy; z = posz;
+	}
+	double x{}, y{}, z{};
+};
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	cout << myfunc(10) << endl; // получаем int - Вызывается функция с int
+	cout << myfunc(5.5) << endl; // получаем double - Вызывается функция с double
+	//------------------------------------PART2------------------------------------
+	cout << endl << "Задача с треугольником" << endl << endl;
+	Point Ap;
+	Point Bp;
+	Point Cp;
+	int CaseSwitcher;
+	cout << "Двумерный - 1 | Трёхмерный - 2" << endl;
+	cin >> CaseSwitcher;
+	switch (CaseSwitcher)
+	{
+		case 1: 
+
+			cout << "Введите координаты точки A: ";
+			cin >> Ap.x >> Ap.y;
+			cout << "Введите координаты точки B: ";
+			cin >> Bp.x >> Bp.y;
+			cout << "Введите координаты точки c: ";
+			cin >> Cp.x >> Cp.y;
+			Ap.z = 0; Bp.z = 0; Cp.z = 0;
+			break;
+		case 2:
+			cout << "Введите координаты точки A: ";
+			cin >> Ap.x >> Ap.y >> Ap.z;
+			cout << "Введите координаты точки B: ";
+			cin >> Bp.x >> Bp.y >> Bp.z;
+			cout << "Введите координаты точки c: ";
+			cin >> Cp.x >> Cp.y >> Cp.z;
+			break;
+		default: 
+			cout << "1 / 2" << endl;
+			break;
+	}
+	Line A{Ap.x,Bp.x,Ap.y,Bp.y,Ap.z,Bp.z};
+	Line B{Bp.x,Cp.x,Bp.y,Cp.y,Bp.z,Cp.z};
+	Line C{Cp.x,Ap.x,Cp.y,Ap.y,Cp.z,Ap.z};
+	// cout << A.Len(A) << " " << B.Len(B) << " " << C.Len(C) << endl;
+	cout << "Периметр = " << A.Len(A) + B.Len(B) + C.Len(C) << endl;
+}

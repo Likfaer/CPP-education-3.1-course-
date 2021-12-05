@@ -1,0 +1,92 @@
+#include <iostream>
+#include <windows.h>
+using namespace std;
+#include <chrono>
+auto start = chrono::high_resolution_clock::now();
+class Test
+{
+public:
+	friend void Fun(Test*);
+	Test(float x = 1)
+	{
+	}
+private:
+	float W = 123;
+	void Z()
+	{
+		cout << "Это закрытая функция класса Test" << endl;
+	}
+
+};
+void Fun(Test* p)
+{
+	cout << "W = " << p->W << endl;
+	p->Z();
+}
+//------------------------------------PART2------------------------------------
+class Abonent
+{
+	friend class Notebook;
+public:
+	Abonent(int IDD = -1, string surnamee = "srNULL", string numberr = "numNULL")
+	{
+		ID = IDD; surname = surnamee; number = numberr;
+		auto end = std::chrono::high_resolution_clock::now();
+		chrono::duration<float> duration = end - start;
+		cout << "[Время вызова конструктора - " << duration.count() << " сек.]" << endl;
+	}
+	~Abonent()
+	{
+		auto end = std::chrono::high_resolution_clock::now();
+		chrono::duration<float> duration = end - start;
+		cout << "[Время вызова  деструктора - " << duration.count() << " сек.]" << endl;
+	}
+private:
+	int ID;
+	string surname;
+	string number;
+};
+class Notebook
+{
+public:
+	void change(Abonent& ntoabo)
+	{
+		cout << "Изменить номер: ";
+		cin >> ntoabo.number;
+	}
+	void show(Abonent& ntoabo)
+	{
+		cout << "Текущий номер -  " << ntoabo.number << endl;
+	}
+};
+
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	int x = -1;
+	//cout << "Передать значение: ";
+	//cin >> x;
+	Test Cname; //без явной инициализации? пункт 3 | Зачем в задаче неиспользуемый конструктор?
+	Fun(&Cname);
+	cout << endl << "------PART 2------" << endl << endl;
+	//------PART 2------
+	Abonent ppl[10];
+	ppl[0] = { 1,"TEST1","100" };
+	ppl[1] = { 2,"TEST1","101" };
+	ppl[2] = { 3,"TEST1","102" };
+	ppl[3] = { 4,"TEST1","103" };
+	ppl[4] = { 5,"TEST1","104" };
+	ppl[5] = { 6,"TEST1","105" };
+	ppl[6] = { 7,"TEST1","106" };
+	ppl[7] = { 8,"TEST1","107" };
+	ppl[8] = { 9,"TEST1","108" };
+	ppl[9] = { 10,"TEST1","109" };
+	Notebook note;
+	cout << " Введите ID для смены номера: ";
+	cin >> x;
+	note.show(ppl[x]);
+	note.change(ppl[x]);
+	note.show(ppl[x]);
+}

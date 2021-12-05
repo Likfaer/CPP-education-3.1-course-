@@ -1,0 +1,94 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <windows.h>
+#include<conio.h>
+#include <iomanip> //для использования манипуляторов с параметрами
+using namespace std;
+
+istream& endp(istream& CC)
+{
+	int pagelines = 3;
+	string totaltext, templine;
+	int clines = 0, i = 0;
+	do {
+		getline(cin, templine);
+		if (templine == "endw")
+			break;
+		totaltext += templine;
+		clines++;
+		//cout << "totaltext" << endl << "======" << endl << totaltext << endl << "======" << endl;
+		//cout << "templine" << endl << "===" << endl << templine << endl << "===" << endl;
+		if (clines == pagelines)
+		{
+			totaltext += "\n==endpage==\n";
+			clines = 0;
+		}
+		else {
+			totaltext += "\n";
+		}
+	} while (1);
+
+	cout << endl << endl << totaltext;
+	return CC;
+}
+istream& endp(istream& CC, int x)
+{
+	int pagelines = x;
+	string totaltext, templine;
+	int clines = 0, i = 0;
+	do {
+		getline(cin, templine);
+		if (templine == "endw")
+			break;
+		totaltext += templine;
+		clines++;
+		//cout << "totaltext" << endl << "======" << endl << totaltext << endl << "======" << endl;
+		//cout << "templine" << endl << "===" << endl << templine << endl << "===" << endl;
+		if (clines == pagelines)
+		{
+			totaltext += "\n==endpage==\n";
+			clines = 0;
+		}
+		else {
+			totaltext += "\n";
+		}
+	} while (1);
+
+	cout << endl << endl << totaltext;
+	return CC;
+}
+istream& endp(istream& CC, int x, string A)
+{
+	int pagelines = x;
+	string totaltext, templine;
+	int clines = 0, i = 0;
+	do {
+		getline(cin, templine);
+		if (templine == "endw")
+			break;
+		totaltext += templine;
+		clines++;
+		//cout << "totaltext" << endl << "======" << endl << totaltext << endl << "======" << endl;
+		//cout << "templine" << endl << "===" << endl << templine << endl << "===" << endl;
+		if (clines == pagelines)
+		{
+			totaltext += A;
+			clines = 0;
+		}
+		else {
+			totaltext += "\n";
+		}
+	} while (1);
+
+	cout << endl << endl << totaltext;
+	return CC;
+}
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	cin >> endp;
+	endp(cin,2);
+	endp(cin, 2, "\n==newline==\n");
+}

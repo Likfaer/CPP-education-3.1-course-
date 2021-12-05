@@ -1,0 +1,47 @@
+#include <iostream>
+#include <conio.h>
+#include <string.h>
+#include <windows.h>
+#include <iomanip> //для использования манипуляторов с параметрами
+using namespace std;
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	//setfill, setw и setprecision
+	cout << oct;
+	cout << "Восьмеричная система      : " << 10 << " " << 20 << " " << 30 << endl;
+	cout << "Восьмеричная система      : " << 40 << " " << 50 << " " << 60 << endl;
+	for (int i = 500; i <= 1000; i += 50)
+		cout << i << endl;
+	cout << hex;
+	cout << "Шестнадцатеричная система : " << 10 << " " << 20 << " " << 30 << endl;
+	cout << "Шестнадцатеричная система : " << 40 << " " << 50 << " " << 60 << endl;
+	for (int i = 500; i <= 1000; i += 50)
+		cout << i << endl;
+	cout << dec;
+	cout << "Десячичная система        : " << 10 << " " << 20 << " " << 30 << endl;
+	cout << "Десячичная система        : " << 40 << " " << 50 << " " << 60 << endl;
+	for (int i = 500; i <= 1000; i += 50)
+		cout << i << endl;
+	cout << setprecision(6);
+	double a = 1.123456789, b = 2.123456789;
+	cout << a << " " << b << endl;
+	double c = 3.123456789, d = 4.123456789;
+	cout << c << " " << d << endl;
+	// Манипуляторы ввода/вывода данных в различных системах счисления распространяются до их явной замены на другую.
+	// Манипулятор seprecision распространяется до его явной отмены
+	
+	cout << setfill('*') << setw(50) ;
+	cout << "Text for manipulators first" << endl;
+	cout << "Text for manipulators second" << endl;
+	// Манипуляторы работы с текстом распространяются на ближайшую цепочку вывода
+	// 2: Setprecision определяет число значащих цифр (округляет последнюю цифру в большую сторону, если последущая цифра была больше и равна 5)
+	cout << setprecision(12);
+	// 3: float ограничен 7 знаками после запятой, поэтому используем double
+	double x = 12345.123456789;
+	cout <<  x << endl;
+	cout << scientific << x << endl;
+	cout << defaultfloat << setprecision(12) << setfill('-') << setw(26) << left << x << endl << right << setw(26) << x << endl;
+}

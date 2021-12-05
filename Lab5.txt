@@ -1,0 +1,124 @@
+﻿#include <iostream>
+#include <windows.h>
+#include <typeinfo>
+using namespace std;
+
+void g_ff()
+{
+    cout << "Вызван ff глобального уровня" << endl;
+}
+class Base
+{
+public:
+    int i = -1;
+    Base()
+    {
+        cout << "Коструктор без параметров" << endl;
+        i = 0; d = 1; l = 2;
+    }
+    Base(int ii, double dd, long ll)
+    {
+        i = ii; d = dd; l = ll;
+        cout << "Создан класс" << endl;
+    }
+    void ff()
+    {
+        cout << "Вызван ff Base уровня" << endl;
+    }
+    void put(double dd)
+    {
+        d=dd;
+    }
+    double get()
+    {
+        return d;
+    }
+    double* getadr()
+    {
+        return &d;
+    }
+private: // данные открыты для функций-членов класса и для friend'ов класса
+    double d = -1;
+protected: //данные открыты для производных классов и их производных
+    long l = -1;
+};
+
+class Derived : public Base   // производный класс
+{
+    friend ostream& operator<< (ostream& out, Derived& cc);
+public:
+    // 6 возможность восстановления уровня доступа к компонентам базового класса. (при помощи using даём Derived_1 доступ к i и l, тк private наследование не даёт доступ к ним)
+    using Base::i;
+    using Base::l;
+    Derived() : Base()
+    {
+        f = 3;
+        cout << "Производный коструктор без параметров" << endl;
+    }
+
+    Derived(int ii, double dd, long  ll, float ff) : Base(ii, dd, ll) // конструктор произв. класса вызывает конструктор класса
+    {
+        cout << "Создан производный класс" << endl;
+        f = ff;
+    }
+    void show()
+    {
+        cout << i << " " << Base::get() << " " << l << " " << f << endl;
+        // cout << &i << " " << "d-protected" << " " << &l << " " << &f << endl;
+    }
+    void showsize()
+    {
+        cout << "Base    - " << sizeof(int) + sizeof(long) + sizeof(double) << " " << sizeof(Base) << endl; // 16 на элементы (4 int + 4 long + 8 double)+ 4 на указатель vptr + 4 на производный класс
+        cout << "Derived - " << sizeof(float) << " " << sizeof(Derived) << endl; // 4 на элементы + 4 на указатель vptr + Basesize
+    }
+    void ff()
+    {
+        cout << "Вызван ff Derived уровня" << endl;
+    }
+    float get()
+    {
+        return f;
+    }
+private:
+    float f = -1;
+};
+ostream& operator << (ostream& out, Derived& cc)
+{
+    out << cc.i << " " << cc.Base::get() << " " << cc.l << " " << cc.get() << endl;
+    out << &cc.i << " " << cc.Base::getadr() << " " << &cc.l << " " << &cc.f << endl;
+    return out;
+}
+class Derived_1 : public Derived
+{
+public:
+    Derived_1(int ii, double dd, long  ll, float ff) : Derived(ii, dd, ll, ff) // конструктор произв. класса вызывает конструктор класса
+    {
+        cout << "Создан Derived_1 класс" << endl;
+    }
+    void foo()
+    {
+        i++;
+        l += 1;
+        Base::ff();
+        Derived::ff();
+        g_ff();
+        // 8 - при поочерёдном удалении из классов идёт обращение к более глобальной (т.е. очерёдность ff() - вызов из Derived, затем из Base, затем глобальная)
+    }
+private:
+};
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Base Main;
+    /Derived Sec;
+    Sec.show();
+    Sec.showsize();
+    Derived Alt(10, 11, 12, 13);
+    Alt.show();
+    cout << Alt;
+    Derived_1 Th(20,21,22,23);
+    Th.foo();
+
+    return 0;
+}

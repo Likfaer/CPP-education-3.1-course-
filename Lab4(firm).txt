@@ -1,0 +1,267 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <windows.h>
+#include <string> 
+#include <typeinfo>
+#include <ctime>
+using namespace std;
+
+
+class Date
+{
+public:
+    Date() {}
+    Date(int dayy, int monthh, int yearr)
+    {
+        cout << "Формирование..(2)" << endl;
+        day = dayy; month = monthh; year = yearr;
+        date = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+    }
+    ~Date()
+    {
+        //cout << "Удаление.." << endl;
+    }
+    friend Date operator+(int X, Date Q);
+    friend Date operator-(Date Q, int X);
+    Date operator+(Date X)
+    {
+        Date temp;
+        //cout << "Main =  " << to_string(day) + "/" + to_string(month) + "/" + to_string(year) << endl;
+        //cout << "X    =  " << to_string(X.day) + "/" + to_string(X.month) + "/" + to_string(X.year) << endl;
+
+        temp.day = X.day + day;
+        temp.month = X.month + month;
+        temp.year = X.year + year;
+        //cout << "BTEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        while (temp.month > 12)
+        {
+            temp.month -= 12;
+            temp.year += 1;
+            //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+        while (temp.day > days[temp.month] + 0)
+        {
+            temp.day -= days[temp.month];
+            temp.month += 1;
+            if (temp.month > 12)
+            {
+                temp.month -= 12;
+                temp.year += 1;
+                 //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+            }
+            //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+        temp.date = to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year);
+        return temp;
+    }
+    
+    Date operator+(int X)
+    {
+        Date temp;
+        //cout << "Main =  " << to_string(day) + "/" + to_string(month) + "/" + to_string(year) << endl;
+        //cout << "X    =  " << X << endl;
+        temp.day = X + day; temp.month = month; temp.year = year;
+        //cout << "BTEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+
+        while (temp.month > 12)
+        {
+            temp.month -= 12;
+            temp.year += 1;
+            //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+        while (temp.day > days[temp.month] + 0)
+        {
+            temp.day -= days[temp.month];
+            temp.month += 1;
+            if (temp.month > 12)
+            {
+                temp.month -= 12;
+                temp.year += 1;
+                 //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+            }
+            //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+
+        temp.date = to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year);
+        return temp;
+    }
+
+    Date operator - (Date X)
+    {
+        Date temp;
+
+        temp.day = day - X.day;
+        temp.month = month - X.month;
+        temp.year = year - X.year;
+        //cout << "Main =  " << to_string(day) + "/" + to_string(month) + "/" + to_string(year) << endl;
+        //cout << "X    =  " << to_string(X.day) + "/" + to_string(X.month) + "/" + to_string(X.year) << endl;
+        //cout << "BTEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+
+        while (temp.month <= 0)
+        {
+            temp.year -= 1;
+            temp.month += 12;
+             //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+        while (temp.day <= 0)
+        {
+            temp.month -= 1;
+            if (temp.month <=0)
+            {
+                temp.month += 12;
+                temp.year -= 1;
+                //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+            }
+            temp.day += days[temp.month];
+            //cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+        temp.date = to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year);
+        return temp;
+    }
+    Date operator++ (int)
+    {
+        Date temp;
+        //cout << "Main =  " << to_string(day) + "/" + to_string(month) + "/" + to_string(year) << endl;
+        temp.day = day; temp.month = month; temp.year = year;
+        //cout << "BTEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        temp.day++;
+        if (temp.day > temp.days[month])
+        {
+            temp.day = 1;
+            temp.month++;
+            if (temp.month > 12)
+            {
+                temp.month = 1;
+                temp.year++;
+            }
+        }
+        temp.date = to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year);
+        return temp;
+    }
+    Date operator-- (int)
+    {
+        Date temp;
+        //cout << "Main =  " << to_string(day) + "/" + to_string(month) + "/" + to_string(year) << endl;
+        temp.day = day; temp.month = month; temp.year = year;
+        //cout << "BTEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        temp.day--;
+        if (temp.day < 1)
+        {
+            temp.month -= 1;
+            if (temp.month <1)
+            {
+                temp.month = 12;
+                temp.year--;
+            }
+            temp.day = temp.days[month];
+            
+        }
+        temp.date = to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year);
+        return temp;
+    }
+    string value()
+    {
+        return date;
+    }
+
+private:
+    int day = 1, month = 1, year = 1900;
+    int days[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
+    string date;
+};
+Date operator+(int X, Date Q)
+{
+    Date temp;
+    // cout << "Main =  " << to_string(Q.day) + "/" + to_string(Q.month) + "/" + to_string(Q.year) << endl;
+    // cout << "X    =  " << X << endl;
+    temp.day = X + Q.day; temp.month = Q.month; temp.year = Q.year;
+    // cout << "BTEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+
+    while (temp.day > Q.days[temp.month])
+    {
+        temp.day -= Q.days[temp.month];
+        temp.month += 1;
+        if (temp.month > 12)
+        {
+            temp.month -= 12;
+            temp.year += 1;
+            // cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+        // cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+    }
+
+    temp.date = to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year);
+    return temp;
+}
+Date operator-(Date Q,int X)
+{
+    Date temp;
+    // cout << "Main =  " << to_string(Q.day) + "/" + to_string(Q.month) + "/" + to_string(Q.year) << endl;
+    // cout << "X    =  " << X << endl;
+    temp.day = Q.day - X ; temp.month = Q.month; temp.year = Q.year;
+    // cout << "BTEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+
+    while (temp.day < 0)
+    {
+        temp.day += Q.days[temp.month];
+        temp.month -= 1;
+        if (temp.month < 1)
+        {
+            temp.month += 12;
+            temp.year -= 1;
+            // cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+        }
+        // cout << "TEMP =  " << to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year) << endl;
+    }
+    temp.date = to_string(temp.day) + "/" + to_string(temp.month) + "/" + to_string(temp.year);
+    return temp;
+}
+ostream& operator << (ostream& out, Date date)
+{
+    out << date.value() << endl;
+    return out;
+}
+
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Date A(16, 9, 2010);
+    Date B(26, 10, 9);
+    Date C;
+    int X = 100;
+    cout << "-----------4-----------" << endl;
+    cout << "Дата начала строительства: " << A;
+    cout << "Время строительства: " << B;
+    A = A + B;
+    cout << "Дата сдачи объекта: " << A;
+    cout << "----------------------" << endl;
+    cout << "Дата сдачи объекта: " << A;
+    cout << "Время строительства: " << B;
+    A = A - B;
+    cout << "Дата начала строительства: " << A;
+    cout << "[НА 1 ДЕНЬ МЕНЬШЕ ПОТОМУ ЧТО БЕЗ ВРЕМЕНИ]" << endl;
+
+    cout << "-----------5-----------" << endl;
+    cout << "Дата поставки: " << A;
+    cout << "Колличество дней: " << X << endl;
+    C = A + X;
+    cout << "[Date + int] Дата след. поставки: " << C;
+    C = X + A;
+    cout << "[int + Date] Дата след. поставки: " << C;
+    //  6 + 7
+    cout << "-----------6-----------" << endl;
+    cout << "Дата начисления зарплаты: " << A;
+    cout << "Колличество дней: " << X << endl;
+    C = A - X;
+    cout << "[Date - int] Дата первой зарплаты: " << C;
+    cout << "-----------7-----------" << endl;
+    cout << "Текущая дата: " << A;
+    C = A++;
+    cout << "Следущая дата: " << C;
+    C = A--;
+    cout << "Предыдущая дата: " << C;
+}
+
+
+

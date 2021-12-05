@@ -1,0 +1,46 @@
+#include<iostream>
+using namespace std;
+template<typename T>
+
+void swapper(T& a, T& b)
+{
+    T t = a; a = b; b = t;
+};
+template<typename T1,typename T2>
+class X
+{
+public:
+    void Maxx(T1 a, T2 b) const;
+};
+template <typename T1,typename T2>
+void X<T1,T2>::Maxx(T1 A, T2 B) const
+{
+    cout << endl << "Default Version" << endl;
+    A > B ? cout << A : cout << B;
+}
+template<>
+void X<string,string>::Maxx(string A, string B) const
+{
+    cout << endl << "String Version" << endl;
+    A.length() > B.length() ? cout << A : cout << B;
+}
+
+
+int main()
+{
+    // template <class T, class T>  T f(T x); шаблон объявлен но не определён
+    // template <class T1, T2> void f(T1 x); у второго параметра отсутствует тип данных (надо указывать каждый)
+    // template <class T>  T  f(int x);  шаблон объявлен но не определён
+    // inline template <class T> T f(T x, T y); inline пишут после объявления шаблона - template <class T> inline T f(T x, T y);
+    int a = 2, b = 4;
+    char q = 'i', e = 'o';
+    string z = "qwe", x = "zxc";
+    cout << a << " " << b; swapper(a, b); cout << " => " << a << " " << b << endl;
+    cout << q << " " << e; swapper(q, e); cout << " => " << q << " " << e << endl;
+    cout << z << " " << x; swapper(z, x); cout << " => " << z << " " << x << endl;
+    X<int,int> Iint;
+    Iint.Maxx(4, 10);
+    X<string,string> str;
+    str.Maxx("asd","1234");
+
+}

@@ -1,0 +1,103 @@
+#include <iostream>
+#include <windows.h>
+#include <typeinfo>
+using namespace std;
+
+class DomesticAnimal
+{
+public:
+    DomesticAnimal()
+    {
+        cout << "(DA) Коструктор без параметров" << endl;
+    }
+    DomesticAnimal(int weightt, float pricee, string colorr)
+    {
+        cout << "(DA) Коструктор с параметрами" << endl;
+        weight = weightt; price = pricee; color = colorr;
+    }
+    void print()
+    {
+        cout << "DA print" << endl;
+        cout << weight << " " << price << " " << color << endl;
+    }
+private:
+protected:
+    int weight = -1;
+    float price = -1;
+    string color = "default";
+};
+class Cow : virtual public DomesticAnimal
+{
+ 
+public:
+    Cow() : DomesticAnimal()
+    {
+        cout << "(Cow) Производный коструктор без параметров" << endl;
+    }
+    Cow(int weightt, float pricee, string colorr): DomesticAnimal(weightt, pricee,colorr)
+    {
+        cout << "(Cow) Производный коструктор" << endl;
+    }
+    void print()
+    {
+        cout << "Cow print" << endl;
+        cout << weight << " " << price << " " << color << endl;
+    }
+private:
+};
+class Buffalo : virtual public DomesticAnimal
+{
+
+public:
+    Buffalo() : DomesticAnimal()
+    {
+        cout << "(Buff) Производный коструктор без параметров" << endl;
+    }
+    Buffalo(int weightt, float pricee, string colorr) : DomesticAnimal(weightt, pricee, colorr)
+    {
+        cout << "(Buff) Производный коструктор" << endl;
+    }
+    void print()
+    {
+        cout << "Buff print" << endl;
+        cout << weight << " " << price << " " << color << endl;
+    }
+private:
+};
+class Beffalo : public Cow, public Buffalo
+{
+
+public:
+    Beffalo() : Cow(), Buffalo()
+    {
+        cout << "(Beff) Производный коструктор без параметров" << endl;
+    }
+    Beffalo(int weightt, float pricee, string colorr)
+    {
+        cout << "(Beff) Производный коструктор" << endl;
+    }
+    void print()
+    {
+        cout << "Beff print" << endl;
+        cout << weight << " " << price << " " << color << endl;
+    }
+private:
+};
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Beffalo A;
+    cout << "---6---" << endl;
+    Cow C(250, 3000.3, "white");
+    Buffalo Bu (400,9000,"black");
+    C.print();
+    Bu.print();
+
+    /* "Алмаз смерти"
+    *      DA       |                  DA       DA                                                                                DA      |Biff становится ответсвенным
+    * COW     Buff  |  на самом деле   COW      Buff  приписываем virtual для общего использования всеми дочерниими = тогда  COW     Buff |за создание DA
+    *     Biff      |                       Biff                                                                                 Biff     |[посредственный родитель]
+    * 
+    */
+}

@@ -1,0 +1,44 @@
+#include <iostream>
+#include <conio.h>
+#include <string.h>
+#include <sstream>
+#include <fstream>
+#include <windows.h>
+#include <iomanip> //для использования манипуляторов с параметрами
+using namespace std;
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	/* Список операторов форматирования ввода / вывода
+	* skipws - пропуск пробелов при вводе
+	* left/right/internal - выравнивание значений по краю | internal - (знак значения - влево, само значение - вправо)
+	* dec/oct/hex - ввод/вывод чисел в опр. системе счисления
+	* showbase - показать тип значения (0x - 16система / 0 - 8система / пусто -  10система)
+	* showpoint - показывает десятичную точку и нули
+	* uppercase - использует заглавные буквы при выводе научных данных
+	* showpos - перед положительными числами будет выводиться +
+	* scientific - вывод чисел в научной нотации
+	* fixed - вывод чисел в обычной нотации (при этом десятичная часть округлена до 6 цифр)
+	* unitbuf - при каждой операции вставки данные немедленно заносятся в поток
+	* stdio -  после каждого вывода данные заносятся в потоки stdout и stderr.
+	* boolalpha - можно вводить и выводить данные bool типа.
+	*/
+	char a;
+	istringstream input("     1test      2test       ");
+	input >> skipws;
+	a = input.peek();
+	cout << "с skipws = " << a << endl;
+	input >> ws;
+	a = input.peek();
+	cout << "без skipws c = " << a << endl;
+
+	cout << setw(30) << left << "Строчка слева" << endl << setw(30) << right << "Строчка справа" << endl;
+	cout << showbase << dec << 10 << " " << oct << 10 << " " << hex << 10 << dec << endl;
+	cout << showpoint << 30 << " " << 10000.0 << " " << 2.30 << endl;
+	//cout << uppercase << scientific << setprecision(2) << showpos << 123.546 << endl; //Запускаем строчку ниже отдельно, чтобы увидеть, что у fixed число знаков после . - 6
+	cout << fixed << 1.234356789 << endl;
+	bool ppp = 1;
+	cout << boolaplha << ppp << endl;
+}

@@ -1,0 +1,181 @@
+#include <iostream>
+#include<typeinfo>
+#include <windows.h>
+#include <cstdlib>
+#include <string>
+#include <vector>
+using namespace std;
+CONST int STUDENTCOUNT = 11;
+string FacList[100];
+int j = 0;
+int FacCount = 0;
+int MaxCourse = 0;
+int ID = 0;
+int CURID = ID;
+class Stock
+{
+public:
+    string FirstName = "FirstName";
+    string Faculty = "IaCE";
+    int Course = 0;
+    string LastName = "LastName";
+    string Patronymic = "Patronymic";
+    string Birthday = "10/10/1950";
+    string Adress = "Example st. 00";
+    string Number = "+79876543210";
+
+    void acquire()
+    {
+
+        cout << "Введите Имя:                           | ";
+        getline(cin, FirstName);  /*
+        cout << endl << "Введите Фамилию:                       | ";
+        getline(cin, LastName);
+        cout << endl << "Введите Отчество:                      | ";
+        getline(cin, Patronymic);*/
+        cout << endl << "Введите дату рождения [01/01/1920]:    | ";
+        getline(cin, Birthday);/*
+        cout << endl << "Введите адрес:                         | ";
+        getline(cin, Adress);
+        cout << endl << "Введите номер телефона[+71231231234]:  | ";
+        getline(cin, Number);
+        cout << endl << "Введите название факультета:           | ";
+        cin >> Faculty; Listadd();
+        cout << endl << "Введите курс:                          | ";
+        cin >> Course; MaxCourse = (Course > MaxCourse) ? Course : MaxCourse;
+        cout << endl;*/
+    }
+    void Listadd()
+    {
+        j = 0;
+        do {
+            if (Faculty == FacList[j]) { break; break; }
+            cout << (Faculty != FacList[j]) << endl;
+            if (Faculty != FacList[j])
+            {
+                FacCount++; FacList[FacCount] = Faculty;
+                break;
+            }
+            j++;
+        } while (j < FacCount);
+    }
+    void show()
+    {
+        cout << "ФИО: " << FirstName + " " + LastName + " " + Patronymic << endl << "Дата рождения: " << Birthday << endl << "Адрес: " << Adress << endl << "Номер телефона: " << Number << endl << "Факультет и курс: " << Faculty << " " << Course << endl << endl;
+    }
+};
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Stock Students[STUDENTCOUNT];
+    Stock& out = Students[CURID];
+    int i, Q;
+    
+    int Caseswitcher = -1;
+    string Compare;
+    //Students[0] = { "Stud0","FAC1",1 };
+    //Students[1] = { "Stud1","FAC1",3 };
+    //Students[2] = { "Stud2","FAC2",5 };
+    out.acquire();
+    FacList[0] = out.Faculty;
+    while (Caseswitcher != 0)
+    {
+        Stock& out = Students[CURID];
+        system("cls");
+        out.show();
+        cout << endl << " 1 - Добавить студента" << endl;
+        cout << " 2 - Сортировка из опр. факультета" << endl;
+        cout << " 3 - Список по курсу и факультету" << endl;
+        cout << " 4 - Сортировка по дате рождения" << endl;
+        cout << " 5 - Список студентов и список факультетов" << endl;
+        cout << " 0 - Выход" << endl;
+        Q = -1;
+        cin >> Caseswitcher;
+        switch (Caseswitcher)
+        {
+        case 1:
+        {
+            CURID += 1;
+            Stock& out = Students[CURID];
+            cin.ignore(2, '\n');
+            out.acquire();
+            break;
+        }
+        case 2:
+            cout << "Введите название факультета: ";
+            cin >> Compare;
+            for (i = 0; i <= STUDENTCOUNT; i++)
+            {
+                if (Students[i].Faculty == Compare)
+                {
+                    Stock& out = Students[i];
+                    out.show();
+                }
+            }
+            cout << " 0 - Выход" << endl;
+            while (Q != 0) cin >> Q;
+            break;
+        case 3:
+            i = 0;
+            int kurs;
+            int f;
+            for (kurs = 1; kurs <= MaxCourse; kurs++)
+            {
+                cout << "Номер курса - " << kurs << endl << " ---------------------------------- " << endl;
+                for (f = 1; f <= FacCount; f++)
+                {
+                    cout << "Название факультета - " << FacList[f] << endl << " ------------------ " << endl;
+                    for (i = 0; i <= STUDENTCOUNT; i++)
+                    {
+                        if ((Students[i].Faculty == FacList[f]) and (Students[i].Course == kurs)) cout << Students[i].FirstName << " " << Students[i].Faculty << " " << Students[i].Course << endl;
+                    }
+                    cout << " ------------------ " << endl;
+                }
+            }
+            cout << " 0 - Выход" << endl;
+            while (Q != 0) cin >> Q;
+            break;
+        case 4:
+        {
+            string year;
+            cout << "Введите год рождения [01/01/2000]: ";
+            cin >> year;
+            string cday = year.substr(0, 2);
+            string cmonth = year.substr(3, 2);
+            string cyear = year.substr(6, 4);
+            cout << " Comp with - " << stoi(cday) << " " << stoi(cmonth) << " " << stoi(cyear) << endl;
+            for (i = 0; i < STUDENTCOUNT; i++)
+            {
+                Stock& out = Students[i];
+                string day = out.Birthday.substr(0, 2);
+                string month = out.Birthday.substr(3, 2);
+                string year = out.Birthday.substr(6, 4);
+                if ((stoi(year) > stoi(cyear)) or (stoi(year) == stoi(cyear) and stoi(month) > stoi(cmonth)) or stoi(year) == stoi(cyear) and stoi(month) == stoi(cmonth) and stoi(day) > stoi(cday))
+                    cout << out.FirstName << " " << out.Birthday << endl;
+            }
+            cout << endl;
+            cout << " 0 - Выход" << endl;
+            while (Q != 0) cin >> Q;
+            break;
+        }
+        case 5:
+        {
+            for (i = 0; i < STUDENTCOUNT; i++)
+            {
+                Stock& out = Students[i];
+                out.show();
+            }
+            cout << endl << endl;
+            for (i = 1; i < FacCount + 1; i++)
+            {
+                cout << FacList[i] << " ";
+            }
+            cout << endl;
+            cout << " 0 - Выход" << endl;
+            while (Q != 0) cin >> Q;
+            break;
+        }
+        }
+    }
+}

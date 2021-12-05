@@ -1,0 +1,79 @@
+#include <iostream>
+#include <windows.h>
+#include <typeinfo>
+# define pi 3.14159265358979323846
+using namespace std;
+
+class Figure
+{
+public:
+    Figure()
+    {
+        cout << "Fig constructor" << endl;
+    }
+    virtual double area(double x1)
+    {
+        pl = pi * x1 * x1;
+        return pl;
+    }
+    virtual double area(double x1, double x2)
+    {
+        pl = x1 * x2;
+        return pl;
+    }
+    virtual void show()
+    {
+		cout << Fname << " | pl = " << pl << endl;
+        cout << &Fname << " | " << &pl << endl;
+    }
+protected:
+    double pl = -1;
+    string Fname = "null";
+};
+class Circle : public Figure
+{
+public:
+    Circle(float rr)
+    {
+        cout << "Circ constructor" << endl;
+        Fname = "Circle";
+        if (rr > 0) r = rr;
+        else { cout << "r<0 | Выход.." << endl; exit(0); }
+        area(r);
+    }
+private:
+    float r = -1;
+};
+
+class Rectangl : public Figure
+{
+public:
+    Rectangl(float x1, float x2 = -1)
+    {
+        cout << "Rect constructor" << endl;
+        a = x1;
+        x2 == -1 ? b = a : b = x2;
+        a == b ? Fname = "Square" : Fname = "Rectangle";
+        area(a, b);
+    }
+private:
+    float a, b;
+};
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Circle A(1);
+    Rectangl B(2);
+    Rectangl C(2,4);
+    cout << "--3--" << endl;
+    Figure T;
+    T.show();
+    cout << "--4--" << endl;
+    Figure* mas[3] = { &A, &B, &C};
+    for (int i = 0; i < 3; i++)
+    {
+        Figure& out = *mas[i];
+        out.show();
+    }
+}
